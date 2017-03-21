@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block style %}
+<style>
+	body{
+		margin: 0px;
+		background-color: #000;
+	}
+
+	#text1 {
+		color:cornflowerblue;
+		shader:phong;
+		font-bevel:bevel;
+		bevel-size:.01;
+		bevel-thickness:.02;
+		font-family:helvetica;
+		font-weight:bold;
+	}
+
+	#text2 {
+		color:goldenrod;
+		shader:lambert;
+		font-bevel:bevel;
+		font-depth:0.5;
+		bevel-size:.01;
+		bevel-thickness:.02;
+		/* this next one is broken - font not loaded - just for testing */
+		font-family:Optima;
+		font-weight:bold;
+	}
+
+	#text3 {
+		color:firebrick;
+		shader:basic;
+		font-depth:0;
+		font-size:.5;
+	}
+
+	#text4 {
+		color:white;
+		shader:phong;
+		font-weight:bold;
+		font-bevel:none;
+		bevel-size:.01;
+		bevel-thickness:.02;
+		cube-image-right:url(../../images/envmap/2-POSITIVE_X.jpg);
+		cube-image-left:url(../../images/envmap/2-NEGATIVE_X.jpg);
+		cube-image-top:url(../../images/envmap/2-POSITIVE_Y.jpg);
+		cube-image-bottom:url(../../images/envmap/2-NEGATIVE_Y.jpg);
+		cube-image-front:url(../../images/envmap/2-POSITIVE_Z.jpg);
+		cube-image-back:url(../../images/envmap/2-NEGATIVE_Z.jpg);
+	}
+
+	@-webkit-keyframes kfRotateY {
+	  from {
+	    -webkit-transform: rotateY(0deg);
+	  }
+	
+	  to {
+	   -webkit-transform: rotateY(360deg);
+	  }
+	}
+
+	.animRotateY
+	 {
+	  -webkit-animation-duration: 4s;
+	  -webkit-animation-name: kfRotateY;
+	  -webkit-animation-iteration-count: infinite;
+	  -webkit-animation-timing-function:ease-in-out;
+	}
+	.animRotateY2
+	 {
+	  -webkit-animation-duration: 5s;
+	  -webkit-animation-name: kfRotateY;
+	  -webkit-animation-iteration-count: infinite;
+	  -webkit-animation-timing-function:linear;
+	}
+
+{% endblock %}
+
+
+{% block body %}
+<div id="container" style="width:98%; height:98%;position:absolute;">
+<glam>
+  <scene>
+   <div id="hoo_container"></div>
+  </scene>
+</glam>
+{% endblock %}
+
+
+{% block javascript %}
+  var hoo_id = 0;
+  var active_hoos[];
+  lines = ["I'm sorry","Please forgive me","I love you","Thank you"]
+
+  (function() {
+    $("#hoo_container").append('<text id="hoo_"' + hoo_id.toString() + '>' + lines[Math.floor(Math.random() * lines.length)] + '</text>');
+    active_hoos.append(hoo_id);
+    setTimeout(arguments.callee, 500);
+    hoo_id = hoo_id + 1;
+  })();
+  (function() {
+    for ( var c = 0; c < active_hoos.length; c++ ) {
+      $("hoo_" + active_hoos[c]).animate({z: "+=1"});
+      if $("hoo_" + active_hoos[c]).attr('z') > 50) {
+        $("hoo_" + active_hoos[c]).remove();
+        delete active_hoos[c];
+    }
+    setTimeout(arguments.callee, 500);
+  })();
+
+
+{% endblock %}
